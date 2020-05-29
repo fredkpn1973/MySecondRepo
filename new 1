@@ -1,0 +1,11 @@
+#! /usr/bin/env python
+import decimal
+
+print("Geef uw gewicht in kg: ")
+gewicht = decimal.Decimal(input())
+print("Geef uw lengte in cm: ")
+lengte = decimal.Decimal(input())/100
+bmi = round(gewicht/(lengte * lengte),2)
+print("Uw gewicht is {} en uw lengte is {} dan is uw BMI {}".format(gewicht,lengte,bmi))
+
+print("Hello World again?")
