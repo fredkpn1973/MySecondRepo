@@ -32,9 +32,14 @@ def translate_netmask_cidr(netmask):
     """
     netmask_octets = netmask.split('.')
     negative_offset = 0
-
+    
+    #Hier tellen we simpel weg alle 1nen die in het masker voorkomen
+    #dit doen we per octet, vandaar de split, en webginnen achteraan, 
+    #vandaar de reversed.
     for octet in reversed(netmask_octets):
+        #Zet de decimale octet om naar een binary van acht lang
         binary = format(int(octet), '08b')
+        #
         for char in reversed(binary):
             if char == '1':
                 break
