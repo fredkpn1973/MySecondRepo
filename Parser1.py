@@ -33,18 +33,19 @@ def translate_netmask_cidr(netmask):
     netmask_octets = netmask.split('.')
     negative_offset = 0
     
-    #Hier tellen we simpel weg alle 1nen die in het masker voorkomen
+    #Hier tellen we simpel weg alle 0en die in het masker voorkomen
     #dit doen we per octet, vandaar de split, en webginnen achteraan, 
     #vandaar de reversed.
     for octet in reversed(netmask_octets):
         #Zet de decimale octet om naar een binary van acht lang
         binary = format(int(octet), '08b')
-        #
+        #Zodra we een een tegen kunnen we stoppen met de for loop
+        #als we een nul zien dan verhogen we de teller met een
         for char in reversed(binary):
             if char == '1':
                 break
             negative_offset += 1
-
+    #Het masker is nu dus het totaal aantal bits in een adres min het aantal 0en
     return '/{0}'.format(32-negative_offset)
 
 
@@ -114,7 +115,7 @@ def configreader(configfiles):
 if  __name__ == '__main__':
     porten = configreader('switch-1.cfg')
     
-    print(porten)
+    print(json.dumps(porten, indent = 4))
             
             
 
