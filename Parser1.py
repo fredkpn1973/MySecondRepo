@@ -66,10 +66,9 @@ def splitrange(raw_range):
 def configreader(configfiles):
     
     match = ReSearcher() 
-    
+    geeft_terug = []
     for configfile in configfiles:
-
-        with open('switch-1.cfg', 'r') as f:
+        with open(configfile, 'r') as f:
             lines = f.readlines()
 
         switchinfo = Vividict()
@@ -87,6 +86,11 @@ def configreader(configfiles):
                 portindex = format(match.group(1))
                 context = 'port'
 
+            
+            elif match(r'vlan (\d+)', line):
+                vlanindex = format(match.group(1))
+                context = 'vlans'
+
             if context == 'port':
                 
                 #Nu gaan we onder het inerface kijken wat we tegen komen, we matchen dus de
@@ -98,24 +102,41 @@ def configreader(configfiles):
                 if match(r'^ switchport mode (\w+)' , line):
                     value = format(match.group(1))
                     switchinfo['port'][portindex]['switchport mode'] = value
+                    
+                elif match(r'^ ip vrf forwarding (\w+)' , line):
+                    value = format(match.group(1))
+                    switchinfo['port'][portindex]['ip vrf forwarding'] = value
 
-
-                if match(r'^ description (\w+)', line):
+                elif match(r'^ description (\w+)', line):
                     value = format(match.group(1))
                     switchinfo['port'][portindex]['description'] = value
                     
-                if match(r'^ ip address (\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3}) (\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3})', line):
-                    value1 = format(match.group(1))
-                    value2 = translate_netmask_cidr(format(match.group(2)))
-                    value3 = value1 + value2
-                    switchinfo['port'][portindex]['ip address'] = value3
-    return(switchinfo)                
+                elif match(r'^ ip address (\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3}) (\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3})', line):
+                    value = format(match.group(1)) + translate_netmask_cidr(format(match.group(2)))
+                    switchinfo['port'][portindex]['ip address'] = value
+
+            elif context == 'vlans':
+                
+                if match(r'^ name (\w+)', line):
+                    value = format(match.group(1))
+                    switchinfo['vlans'][vlanindex]['name'] = value
+
+            if line == "!":
+                context = ''
+
+        geeft_terug.append(switchinfo)
+
+            
+
+
+    return(geeft_terug)                
 
            
 if  __name__ == '__main__':
-    porten = configreader('switch-1.cfg')
+    porten = configreader(['TestSwitch-cfg.txt','switch-1.cfg'])
     
     print(json.dumps(porten, indent = 4))
+ 
             
             
 
