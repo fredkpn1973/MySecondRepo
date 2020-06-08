@@ -1,0 +1,98 @@
+[
+    {
+        "TestSwitch-cfg.txt": {
+            "vlans": {
+                "10": {
+                    "name": "Ten"
+                },
+                "11": {
+                    "name": "Eleven"
+                },
+                "12": {
+                    "name": "Twelfe"
+                },
+                "13": {
+                    "name": "Thirteen"
+                }
+            },
+            "port": {
+                "Port-channel1": {
+                    "description": "TO Switch1",
+                    "switchport mode": "trunk"
+                },
+                "Port-channel10": {
+                    "description": "TO Server1"
+                },
+                "Port-channel11": {
+                    "description": "TO Server2"
+                },
+                "Port-channel12": {
+                    "description": "TO Server3"
+                },
+                "GigabitEthernet1/0/1": {
+                    "description": "TO Deze description doet het ook"
+                },
+                "GigabitEthernet1/0/2": {
+                    "description": "TO Server5"
+                },
+                "GigabitEthernet1/0/3": {
+                    "description": "TO Server6"
+                },
+                "GigabitEthernet1/0/23": {
+                    "description": "TO Server7"
+                },
+                "GigabitEthernet1/0/24": {
+                    "description": "TO Server8"
+                },
+                "TenGigabitEthernet1/1/1": {
+                    "description": "TO Switch1",
+                    "switchport mode": "trunk"
+                },
+                "GigabitEthernet2/0/1": {
+                    "description": "TO xxx"
+                },
+                "GigabitEthernet2/0/2": {
+                    "description": "TO xxx"
+                },
+                "GigabitEthernet2/0/3": {
+                    "description": "TO xxx"
+                },
+                "TenGigabitEthernet2/1/1": {
+                    "description": "TO Switch1",
+                    "switchport mode": "trunk"
+                },
+                "Vlan10": {
+                    "ip address": "1.2.3.4/24"
+                },
+                "Vlan11": {
+                    "ip address": "1.2.3.4/24"
+                }
+            }
+        }
+    },
+    {
+        "switch-1.cfg": {
+            "port": {
+                "FastEthernet0": {
+                    "ip vrf forwarding": "mgmt",
+                    "ip address": "10.23.111.201/24"
+                },
+                "GigabitEthernet1/0/1": {
+                    "description": "esx"
+                },
+                "GigabitEthernet1/1/1": {
+                    "description": "NOC"
+                },
+                "GigabitEthernet1/1/2": {
+                    "description": "NOC"
+                },
+                "GigabitEthernet1/1/3": {
+                    "description": "xena"
+                },
+                "Vlan3000": {
+                    "ip address": "10.30.0.10/24"
+                }
+            }
+        }
+    }
+]

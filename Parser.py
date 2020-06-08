@@ -1,6 +1,7 @@
 import re
 import json
 
+
 class ReSearcher():
     match = None
 
@@ -19,36 +20,42 @@ class Vividict(dict):
 
 
 def splitrange(raw_range):
-
     """
     ex. splitrange('105-107') will return ['105','106','107']
     """
 
     m = re.search(r'^(\d+)\-(\d+)$', raw_range)
     if m:
-        first = int(format(match.group(1)))
-        last = int(format(match.group(2)))
+        first = int(format(m.group(1)))
+        last = int(format(m.group(2)))
         return [str(i) for i in range(first, last+1)]
 
 
 def configreader(configfiles):
-    
-    match = ReSearcher() 
+
+    net_info = []  # list of switchinfo objects
+
+    match = ReSearcher()
 
     for configfile in configfiles:
 
-        with open('switch-1.cfg', 'r') as f:
+        with open(configfile, 'r') as f:
             lines = f.readlines()
 
         switchinfo = Vividict()
         context = ''
-      
+
         for line in lines:
             line = line.rstrip()
 
             if match(r'interface (.*)', line):
                 portindex = format(match.group(1))
+                vlan_list = []
                 context = 'port'
+
+            elif match(r'hostname (.*)', line):
+                hostname = format(match.group(1))
+                switchinfo['hostname'] = hostname
 
             if context == 'port':
 
@@ -56,17 +63,42 @@ def configreader(configfiles):
                     value = format(match.group(1))
                     switchinfo['port'][portindex]['switchport mode'] = value
 
-                if match(r'^ description (\w+)', line):
+                elif match(r'^ description (\w+)', line):
                     value = format(match.group(1))
                     switchinfo['port'][portindex]['description'] = value
-        print(json.dumps(switchinfo))
 
-            
-if  __name__ == '__main__':
-    configreader("switch-1.cfg")
-            
-            
+                elif match(r'^ switchport access vlan (\d+)', line):
+                    value = format(match.group(1))
+                    portitems = switchinfo['port'][portindex]
+                    portitems['switchport access vlan'] = value
 
-        
+                elif match(r'^ switchport trunk allow vlan.* ([0-9,-]+)', line):
+                    value = format(match.group(1))
+                    for raw_vlans in value.split(','):
+                        if '-' in raw_vlans:
+                            for vlan_id in splitrange(raw_vlans):
+                                vlan_list.append(vlan_id)
+                        else:
+                            vlan_list.append(raw_vlans)
+                    switchinfo['port'][portindex]['vlan_list'] = vlan_list
+
+                elif match(r'!', line):
+                    context = ''
+
+        net_info.append(switchinfo)
+
+    return net_info
 
 
+def main():
+
+    configfiles = ['switch-1.cfg', 'TestSwitch-cfg.txt']
+
+    net_info = configreader(configfiles)
+
+    with open('net_info.json', 'w') as f:
+        json.dump(net_info, f, indent=4)
+
+
+if __name__ == '__main__':
+    main()

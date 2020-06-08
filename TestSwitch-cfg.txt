@@ -227,7 +227,7 @@ interface GigabitEthernet0/0
  negotiation auto 
 ! 
 interface GigabitEthernet1/0/1 
- description TO Server4
+ description TO Deze description doet het ook
  switchport access vlan 10
  switchport mode access 
  storm-control broadcast level 20.00 
