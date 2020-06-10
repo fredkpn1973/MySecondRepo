@@ -55,7 +55,7 @@ def splitrange(raw_range):
 def configreader(configfiles):
 
     match = ReSearcher()
-    geeft_terug = []
+    geeft_terug = {}
     for configfile in configfiles:
         with open(configfile, 'r') as f:
             lines = f.readlines()
@@ -103,8 +103,7 @@ def configreader(configfiles):
             if line == "!":
                 context = ''
 
-        print(type(switchinfo))
-        geeft_terug.append(switchinfo)
+        geeft_terug.update(switchinfo)
 
     return(geeft_terug)
 
@@ -116,7 +115,7 @@ if __name__ == '__main__':
 
     x = 0
     # Ook nu wordt het interessant. We hebben nu dus een lijst met twee elemenet. TestSwitch en switch-1. De bevatten op hun beurt weer een dictionary.
-    print(porten['switch-1.cfg'])
-
-    for nodes in porten:
-        sleutel = nodes.keys()
+    with open('json.json', 'r') as f:
+        lines = f.readlines()
+        file_dict = json.dumps(f)
+        print(file_dict)
