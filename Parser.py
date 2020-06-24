@@ -18,7 +18,8 @@ class ReSearcher():
 class Vividict(dict):
     def __missing__(self, key):
         value = self[key] = type(self)()
-        return valuen
+
+        return value
 
 
 def splitrange(raw_range):
