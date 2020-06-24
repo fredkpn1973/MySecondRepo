@@ -10,4 +10,3 @@ print("Uw gewicht is {} en uw lengte is {} dan is uw BMI {}".format(
     gewicht, lengte, bmi))
 
 print("Hello World again?")
-print("Bye Bye")
