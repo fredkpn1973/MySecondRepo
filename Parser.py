@@ -1,7 +1,7 @@
 import re
 import json
-#Comment in featureA
-
+# Comment in featureA
+# This text is added in featureZ
 
 
 class ReSearcher():
@@ -35,11 +35,12 @@ def splitrange(raw_range):
 
 def configreader(configfiles):
 
-<<<<<<< HEAD
+
+<< << << < HEAD
     net_info = []  # list of switchinfo objects
 
-=======
->>>>>>> featureA
+== == == =
+>>>>>> > featureA
     match = ReSearcher()
 
     for configfile in configfiles:
@@ -72,7 +73,7 @@ def configreader(configfiles):
                     value = format(match.group(1))
                     switchinfo['port'][portindex]['description'] = value
 
-<<<<<<< HEAD
+<< << << < HEAD
                 elif match(r'^ switchport access vlan (\d+)', line):
                     value = format(match.group(1))
                     portitems = switchinfo['port'][portindex]
