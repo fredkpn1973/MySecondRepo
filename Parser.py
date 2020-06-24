@@ -1,5 +1,7 @@
 import re
 import json
+#Comment in featureA
+
 
 class ReSearcher():
     match = None
@@ -19,7 +21,6 @@ class Vividict(dict):
 
 
 def splitrange(raw_range):
-
     """
     ex. splitrange('105-107') will return ['105','106','107']
     """
@@ -32,8 +33,8 @@ def splitrange(raw_range):
 
 
 def configreader(configfiles):
-    
-    match = ReSearcher() 
+
+    match = ReSearcher()
 
     for configfile in configfiles:
 
@@ -42,7 +43,7 @@ def configreader(configfiles):
 
         switchinfo = Vividict()
         context = ''
-      
+
         for line in lines:
             line = line.rstrip()
 
@@ -61,12 +62,6 @@ def configreader(configfiles):
                     switchinfo['port'][portindex]['description'] = value
         print(json.dumps(switchinfo))
 
-            
-if  __name__ == '__main__':
+
+if __name__ == '__main__':
     configreader("switch-1.cfg")
-            
-            
-
-        
-
-
