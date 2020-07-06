@@ -1,0 +1,54 @@
+{% if templ_type == '1' or templ_type == '2' or templ_type == '4' %}
+  {% if templ_type == '1' or templ_type == '2' %}
+interface BVI{{vpn_str}}
+{% if bvi_desc %}
+interface BVI{{vpn_str}} description {{bvi_desc}}
+{% endif %}
+interface BVI{{vpn_str}} mtu 9114
+interface BVI{{vpn_str}} vrf {{vrf_id}}
+interface BVI{{vpn_str}} ipv4 address {{bvi_ip}} {{bvi_mask}}
+interface BVI{{vpn_str}} ipv4 access-group GMI_IN_ACL ingress
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD routed interface BVI{{vpn_str}}
+!!
+router hsrp interface BVI{{vpn_str}}
+    {% if vlan|int > 255 %}
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} timers 1 10
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} address {{hsrp_ip}}
+      {% if active_router %}
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} preempt delay 180
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} priority 120
+      {% elif not active_router %}
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} preempt
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} priority 110
+      {% endif %}
+    {% else %}
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} version 2 timers 1 10
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} version 2 address {{hsrp_ip}}
+      {% if active_router %}
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} version 2 preempt delay 180
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} version 2 priority 120
+      {% elif not active_router %}
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} version 2 preempt
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} version 2 priority 110
+      {% endif %}
+    {% endif %}
+    {% if mc %}
+router pim vrf {{vrf_id}} address-family ipv4 interface BVI{{vpn_str}}
+router pim vrf {{vrf_id}} address-family ipv4 interface BVI{{vpn_str}} bfd minimum-interval 200
+router pim vrf {{vrf_id}} address-family ipv4 interface BVI{{vpn_str}} bfd fast-detect
+    {% endif %}
+  {% endif %}
+!!
+  {% if templ_type == '1' or templ_type == '4' %}
+router hsrp interface BVI{{vpn_str}} hsrp bfd minimum-interval 200
+router hsrp interface BVI{{vpn_str}} hsrp delay minimum 180 reload 180
+    {% if vlan|int > 255 %}
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} bfd fast-detect peer ipv4 {{bvi_peer_ip}}
+    {% else %}
+router hsrp interface BVI{{vpn_str}} address-family ipv4 hsrp {{vlan}} version 2 bfd fast-detect peer ipv4 {{bvi_peer_ip}}
+    {% endif %}
+  {% endif %}
+{% endif %}
+{% if templ_type == '3' %}
+no interface BVI{{vpn_str}} shutdown 
+{% endif %}

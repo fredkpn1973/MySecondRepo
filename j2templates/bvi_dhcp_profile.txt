@@ -1,0 +1,3 @@
+{% if profile_name %}
+dhcp ipv4 interface {{bvi_intf}} relay profile {{profile_name}}
+{% endif %}

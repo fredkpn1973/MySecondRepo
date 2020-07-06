@@ -1,0 +1,5 @@
+interface {{intf_index}}.{{vlan}} l2transport
+interface {{intf_index}}.{{vlan}} l2transport description {{intf_desc}}
+interface {{intf_index}}.{{vlan}} l2transport encapsulation dot1q {{vlan}}
+interface {{intf_index}}.{{vlan}} l2transport rewrite ingress tag pop 1 symmetric
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD interface {{intf_index}}.{{vlan}}

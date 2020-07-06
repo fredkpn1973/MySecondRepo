@@ -1,0 +1,26 @@
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD
+{% if bd_desc %}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD description {{bd_desc}}
+{% endif %}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD storm-control unknown-unicast pps {{sc_uu}}
+{% if not mc %}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD storm-control multicast pps {{sc_m}}
+{% endif %}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD storm-control broadcast pps {{sc_b}}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD mac aging time {{mac_ag}}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD mac limit maximum 16000
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD mac limit action no-flood
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD mac limit notification both
+{% if mac_sec %}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD mac secure
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD mac secure action none
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD mac secure logging
+{% endif %}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD mtu 9100
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD vfi EVC_{{evc_str}}_VFI
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD vfi EVC_{{evc_str}}_VFI vpn-id {{vpn_str}}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD vfi EVC_{{evc_str}}_VFI autodiscovery bgp
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD vfi EVC_{{evc_str}}_VFI autodiscovery bgp rd auto
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD vfi EVC_{{evc_str}}_VFI autodiscovery bgp route-target 42517:{{vpn_str}}
+l2vpn bridge group SPN bridge-domain EVC_{{evc_str}}_BD vfi EVC_{{evc_str}}_VFI autodiscovery bgp signaling-protocol ldp
+!!

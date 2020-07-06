@@ -1,0 +1,24 @@
+eapol disable
+vlan delete {{vlan}}
+vlan create {{new_vlan}} type port 1
+{% if vlan_name %}
+vlan name {{new_vlan}} "{{vlan_name}}"
+{% endif %}
+vlan members {{new_vlan}} {{vlan_member_port_list}}
+{% for pvid_port_info in all_pvid_port_list %}
+vlan ports {{pvid_port_info}} pvid {{new_vlan}}
+{% endfor %}
+{% if intf_all_type %}
+interface {{intf_all_type}} ALL
+{% for item in spann_tree_items %}
+  {{item}}
+{% endfor %}
+exit
+{% endif %}
+{% if mrouter_ports %}
+interface vlan {{new_vlan}}
+ip igmp snooping
+ip igmp mrouter {{mrouter_ports}}
+exit
+{% endif %}
+eapol enable

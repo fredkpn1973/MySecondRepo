@@ -1,0 +1,15 @@
+no vlan {{vlan}}
+vlan {{new_vlan}} 
+{% if vlan_name %}
+ name {{vlan_name}}
+{% endif %}
+exit
+interface port-channel1
+ switchport trunk allowed vlan remove {{vlan}}
+ switchport trunk allowed vlan add {{new_vlan}}
+{% for intf_index in intf_list %}
+interface {{intf_index}}
+ switchport access vlan {{new_vlan}}
+{% endfor %}
+
+
