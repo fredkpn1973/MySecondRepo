@@ -1,0 +1,42 @@
+import os
+import re
+import sys
+import shutil
+import json
+import PySimpleGUI as sg
+import ios_xr_parser as xr_parse
+from glob import glob
+from multiprocessing import Pool
+
+
+def main():
+
+    # Select configuration backup directory and enter VLAN info
+    # in PySimple GUI
+    layout = [
+        [sg.Text('Select backup config directory')],
+        [sg.InputText(), sg.FolderBrowse()],
+        [sg.Text('_' * 80)],
+        [sg.Text('Current VLAN-id'), sg.InputText((), size=(4, 1))],
+        [sg.Text('_' * 80)],
+        [sg.Submit(), sg.Cancel()]
+    ]
+    window = sg.Window('GMI VLAN migration tool').Layout(layout)
+    event, values = window.Read()
+
+    config_directory = values[0]
+    vrf_name = values[1]
+
+    base_dir = os.getcwd()
+    os.chdir(config_directory)
+    print(base_dir)
+
+    configfiles = [configfile for configfile in glob('*.spn.local.txt')
+                   if 'AGG' or 'SB' in configfile]
+
+    files = xr_parse.ios_xr_parser(configfiles[1])
+    print(json.dumps(files, indent=4))
+
+
+if __name__ == "__main__":
+    main()
